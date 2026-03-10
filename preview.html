@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pure Shea Naturals</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#fffaf0;
+}
+
+header{
+background:#d2691e;
+color:white;
+padding:15px;
+display:flex;
+justify-content:space-between;
+}
+
+nav a{
+color:white;
+margin:10px;
+text-decoration:none;
+}
+
+.hero{
+text-align:center;
+padding:80px;
+background:#ffe4b5;
+}
+
+.products{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+padding:40px;
+}
+
+.product{
+width:250px;
+border:1px solid #ddd;
+padding:15px;
+border-radius:10px;
+text-align:center;
+background:white;
+}
+
+.slider{
+height:200px;
+overflow:hidden;
+}
+
+.slide{
+width:100%;
+display:none;
+}
+
+.slide.active{
+display:block;
+}
+
+button{
+background:#d2691e;
+color:white;
+border:none;
+padding:10px;
+cursor:pointer;
+}
+
+.cart{
+position:fixed;
+right:20px;
+top:80px;
+width:250px;
+background:white;
+border:1px solid #ccc;
+padding:15px;
+border-radius:10px;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+footer{
+background:#d2691e;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
+.mobilecart{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#d2691e;
+color:white;
+border-radius:50%;
+padding:15px;
+font-size:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>Pure Shea Naturals</h2>
+<nav>
+<a href="#">Home</a>
+<a href="#products">Products</a>
+<a href="#about">About</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<section class="hero">
+<h1>100% Natural Shea Butter</h1>
+<p>Healthy Skin • Healthy Hair • Natural Beauty</p>
+</section>
+
+<section id="products" class="products">
+
+<div class="product" data-name="Raw Shea Butter" data-price="10">
+
+<div class="slider">
+<img class="slide active" src="https://via.placeholder.com/250x200?text=Shea1">
+<img class="slide" src="https://via.placeholder.com/250x200?text=Shea2">
+<img class="slide" src="https://via.placeholder.com/250x200?text=Shea3">
+</div>
+
+<h3>Raw Shea Butter</h3>
+<p>$10</p>
+<button onclick="addToCart(this)">Add to Cart</button>
+
+</div>
+
+
+<div class="product" data-name="Shea Butter Lotion" data-price="15">
+
+<div class="slider">
+<img class="slide active" src="https://via.placeholder.com/250x200?text=Lotion1">
+<img class="slide" src="https://via.placeholder.com/250x200?text=Lotion2">
+<img class="slide" src="https://via.placeholder.com/250x200?text=Lotion3">
+</div>
+
+<h3>Shea Butter Lotion</h3>
+<p>$15</p>
+<button onclick="addToCart(this)">Add to Cart</button>
+
+</div>
+
+
+<div class="product" data-name="Hair Cream" data-price="12">
+
+<div class="slider">
+<img class="slide active" src="https://via.placeholder.com/250x200?text=Cream1">
+<img class="slide" src="https://via.placeholder.com/250x200?text=Cream2">
+<img class="slide" src="https://via.placeholder.com/250x200?text=Cream3">
+</div>
+
+<h3>Hair Cream</h3>
+<p>$12</p>
+<button onclick="addToCart(this)">Add to Cart</button>
+
+</div>
+
+</section>
+
+
+<div class="cart">
+
+<h3>Cart</h3>
+
+<div id="cart-items"></div>
+
+<p>Total: $<span id="total">0</span></p>
+
+<button onclick="checkout()">Checkout</button>
+
+</div>
+
+
+<section id="about" style="padding:40px">
+
+<h2>About Us</h2>
+
+<p>
+Pure Shea Naturals produces high quality organic Shea butter products for
+healthy skin and hair. Our products are natural, safe and chemical free.
+</p>
+
+</section>
+
+
+<section id="contact" style="padding:40px">
+
+<h2>Contact</h2>
+
+<p>Email: info@pureshea.com</p>
+
+<p>Phone: +234000000000</p>
+
+</section>
+
+
+<footer>
+
+<p>© 2026 Pure Shea Naturals</p>
+
+</footer>
+
+
+<button class="mobilecart" onclick="document.querySelector('.cart').scrollIntoView()">
+🛒
+</button>
+
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<script>
+
+let cart=[]
+
+function addToCart(btn){
+
+let product=btn.parentElement
+
+let name=product.dataset.name
+
+let price=parseFloat(product.dataset.price)
+
+let existing=cart.find(p=>p.name===name)
+
+if(existing){existing.qty++}
+
+else{cart.push({name,price,qty:1})}
+
+renderCart()
+
+}
+
+function renderCart(){
+
+let items=document.getElementById("cart-items")
+
+items.innerHTML=""
+
+let total=0
+
+cart.forEach(p=>{
+
+total+=p.price*p.qty
+
+items.innerHTML+=`<div class="cart-item">
+<span>${p.name} x${p.qty}</span>
+<span>$${p.price*p.qty}</span>
+</div>`
+
+})
+
+document.getElementById("total").innerText=total
+
+}
+
+
+function checkout(){
+
+let email=prompt("Enter your email")
+
+let total=document.getElementById("total").innerText
+
+let handler=PaystackPop.setup({
+
+key:"YOUR_PUBLIC_KEY_HERE",
+
+email:email,
+
+amount:total*100,
+
+currency:"NGN",
+
+callback:function(response){
+
+alert("Payment Successful")
+
+cart=[]
+
+renderCart()
+
+}
+
+})
+
+handler.openIframe()
+
+}
+
+
+document.querySelectorAll(".slider").forEach(slider=>{
+
+let index=0
+
+let slides=slider.querySelectorAll(".slide")
+
+setInterval(()=>{
+
+slides[index].classList.remove("active")
+
+index=(index+1)%slides.length
+
+slides[index].classList.add("active")
+
+},3000)
+
+})
+
+</script>
+
+</body>
+</html>
